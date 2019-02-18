@@ -1,0 +1,11 @@
+#!/bin/tcsh -f
+
+set size=128
+set location='./gallery'
+set filesize = `jpegtopnm  < "$location/$1.jpg" | pnmfile`;
+
+#prepare an icon
+set cmd=`echo "$filesize" | awk '$4>=$6&&$4<1.5*$6{ print "cat"}$4>=1.5*$6{marg=int(($4-1.5*$6)/2); print "pnmcut -left ",marg,"-right",$4-marg-1}$4<$6{marg=int(($6-$4)/2); print "pnmcut -top ",marg,"-bottom",$6-marg-1}'`
+
+rm -f $location/icons/$1-s.jpg
+jpegtopnm < $location/$1.jpg | `echo $cmd` | pnmscale -ysize `expr $size - 2` | pnmmargin -black 1 | pnmtojpeg --optimize --quality=85 > $location/icons/$1-s.jpg

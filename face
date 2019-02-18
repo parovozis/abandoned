@@ -1,0 +1,12 @@
+#!/bin/csh
+set tmpfile=tmpfile
+ 
+set cmd=`djpeg < $1 | pnmfile | awk '$4==$6{}$4>$6{marg=int(($4-$6)/2); print "pnmcut -left ",marg,"-right",$4-marg-1}$4<$6{marg=int(($6-$4)/2); print "pnmcut -top ",marg,"-bottom",$6-marg-1}'`
+
+if ("$cmd" == "") then
+    djpeg < $1 |               pnmscale -ysize 94 | ppmnorm | pnmnlfilt  -0.3 0.8 | pnmmargin -black 1 | cjpeg -optimize -quality 85 > $2
+else
+    djpeg < $1 | `echo $cmd` | pnmscale -ysize 94 | ppmnorm | pnmnlfilt  -0.3 0.8 | pnmmargin -black 1 | cjpeg -optimize -quality 85 > $2
+endif
+
+rm -f $1

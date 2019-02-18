@@ -1,0 +1,15 @@
+body {
+    background-color : #F7E0B7;
+    background-image : url('bg.jpg');
+    margin-left : 10px;
+    margin-right : 10px;
+    margin-top : 10px;
+     color : #29303B;
+}
+a:visited {
+    color : #716E6C;
+}
+
+a:link {
+    color : #473624;
+}
